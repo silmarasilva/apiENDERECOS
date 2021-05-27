@@ -8,11 +8,11 @@ from flask_basicauth import BasicAuth
 
 basic_auth = auth
 
-#Criando a Tabela enderecos - CREATE TABLE
+'''Criando a Tabela enderecos - CREATE TABLE
 def create_table():
 	conn = mysql.connect()
 	cursor = conn.cursor(pymysql.cursors.DictCursor)
-	cursor.execute("CREATE TABLE IF NOT EXISTS db_clientes.tbl_enderecos (idCliente INTEGER NOT NULL,idEndereco INT NOT NULL AUTO_INCREMENT, rua VARCHAR(100) NOT NULL, numero INT NOT NULL, bairro VARCHAR(60) NOT NULL, cidade VARCHAR(60) NOT NULL, estado VARCHAR(60) NOT NULL, cep VARCHAR(20) NOT NULL, PRIMARY KEY(idEndereco), FOREIGN KEY(idCliente) REFERENCES tbl_clientes(id))")
+	cursor.execute("CREATE TABLE IF NOT EXISTS db_clientes.tbl_enderecos (idCliente INTEGER NOT NULL,idEndereco INT NOT NULL AUTO_INCREMENT, rua VARCHAR(100) NOT NULL, numero INT NOT NULL, bairro VARCHAR(60) NOT NULL, cidade VARCHAR(60) NOT NULL, estado VARCHAR(60) NOT NULL, cep VARCHAR(20) NOT NULL, PRIMARY KEY(idEndereco), FOREIGN KEY(idCliente) REFERENCES tbl_clientes(id))")'''
 
 #Criando as Rotas API's para a Tabela Endereço (POST)
 # Para fazer um POST o idEndreço e o IdCliente deve ser passdo no body/raw da API manualmente
