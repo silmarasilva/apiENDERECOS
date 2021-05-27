@@ -144,11 +144,6 @@ def not_found(error=None):
     respone.status_code = 404
     return respone
 
-if __name__ == "__main__":
-    app.debug = True
-    create_table()
-    app.run()
-
 # Criando as Rotas API para relação JOIN Cliente e Endereço - GET
 # Busca de endereços por ID do clientes
 # http://127.0.0.1:5000/clientes/enderecos/id
