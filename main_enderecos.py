@@ -12,7 +12,7 @@ basic_auth = auth
 def create_table():
 	conn = mysql.connect()
 	cursor = conn.cursor(pymysql.cursors.DictCursor)
-	cursor.execute("CREATE TABLE IF NOT EXISTS db_clientes.tbl_enderecos (idCliente INTEGER NOT NULL,idEndereco INT NOT NULL AUTO_INCREMENT, rua VARCHAR(100) NOT NULL, numero INT NOT NULL, bairro VARCHAR(60) NOT NULL, cidade VARCHAR(60) NOT NULL, estado VARCHAR(60) NOT NULL, cep VARCHAR(20) NOT NULL, PRIMARY KEY(idEndereco), FOREIGN KEY(idCliente) REFERENCES tbl_clientes(id))")'''
+	cursor.execute("CREATE TABLE IF NOT EXISTS db_silale.tbl_enderecos (idCliente INTEGER NOT NULL,idEndereco INT NOT NULL AUTO_INCREMENT, rua VARCHAR(100) NOT NULL, numero INT NOT NULL, bairro VARCHAR(60) NOT NULL, cidade VARCHAR(60) NOT NULL, estado VARCHAR(60) NOT NULL, cep VARCHAR(20) NOT NULL, PRIMARY KEY(idEndereco), FOREIGN KEY(idCliente) REFERENCES tbl_clientes(id))")'''
 
 #Criando as Rotas API's para a Tabela Endereço (POST)
 # Para fazer um POST o idEndreço e o IdCliente deve ser passdo no body/raw da API manualmente
@@ -30,7 +30,7 @@ def add_endereco():
 		_estado = _json['estado']
 		_cep = _json['cep']		
 		if _rua and _numero and _bairro and _cidade and _estado and _cep and _idEndereco and request.method == 'POST':			
-			sqlQuery = "INSERT INTO db_clientes.tbl_enderecos(idCliente, rua, numero, bairro, cidade, estado, cep, idEndereco) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+			sqlQuery = "INSERT INTO db_silale.tbl_enderecos(idCliente, rua, numero, bairro, cidade, estado, cep, idEndereco) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
 			bindData = (_idCliente, _rua, _numero, _bairro, _cidade, _estado, _cep, _idEndereco)
 			conn = mysql.connect()
 			cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -51,7 +51,7 @@ def enderecos():
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT idCliente, rua, numero, bairro, cidade, estado, cep, idEndereco FROM db_clientes.tbl_enderecos")
+		cursor.execute("SELECT idCliente, rua, numero, bairro, cidade, estado, cep, idEndereco FROM db_silale.tbl_enderecos")
 		empRows = cursor.fetchall()
 		respone = jsonify(empRows)
 		respone.status_code = 200
@@ -69,7 +69,7 @@ def endereco_cliente(idEndereco):
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT idCliente, rua, numero, bairro, cidade, estado, cep, idEndereco FROM db_clientes.tbl_enderecos WHERE idEndereco=%s", idEndereco)
+		cursor.execute("SELECT idCliente, rua, numero, bairro, cidade, estado, cep, idEndereco FROM db_silale.tbl_enderecos WHERE idEndereco=%s", idEndereco)
 		empRows = cursor.fetchone()
 		if not empRows:
 			return Response('Endereço não encontrado', status=404)
@@ -97,7 +97,7 @@ def update_endereco():
 		_estado = _json['estado']
 		_cep = _json['cep']		
 		if _rua and _numero and _bairro and _cidade and _estado and _cep and _idCliente and _idEndereco and request.method == 'PUT':
-			sqlQuery = "UPDATE db_clientes.tbl_enderecos SET rua=%s, numero=%s, bairro=%s, cidade=%s, estado=%s, cep=%s, idCliente=%s WHERE idEndereco=%s"
+			sqlQuery = "UPDATE db_silale.tbl_enderecos SET rua=%s, numero=%s, bairro=%s, cidade=%s, estado=%s, cep=%s, idCliente=%s WHERE idEndereco=%s"
 			bindData = (_rua, _numero, _bairro, _cidade, _estado, _cep, _idCliente, _idEndereco)
 			conn = mysql.connect()
 			cursor = conn.cursor()
@@ -122,7 +122,7 @@ def delete_endereco(idEndereco):
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor()
-		cursor.execute("DELETE FROM db_clientes.tbl_enderecos WHERE idEndereco =%s", (idEndereco))
+		cursor.execute("DELETE FROM db_silale.tbl_enderecos WHERE idEndereco =%s", (idEndereco))
 		conn.commit()
 		respone = jsonify('Cliente deletado com sucesso!')
 		respone.status_code = 200
@@ -153,7 +153,7 @@ def ligacao_cliente_enderecos(id):
     try:
         conn = mysql.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT db_clientes.tbl_clientes.nome, db_clientes.tbl_enderecos.rua, db_clientes.tbl_enderecos.numero, db_clientes.tbl_enderecos.bairro, db_clientes.tbl_enderecos.cidade, db_clientes.tbl_enderecos.estado, db_clientes.tbl_enderecos.cep FROM db_clientes.tbl_clientes JOIN db_clientes.tbl_enderecos ON db_clientes.tbl_clientes.id = db_clientes.tbl_enderecos.idCliente WHERE id = %s", id)
+        cursor.execute("SELECT db_silale.tbl_clientes.nome, db_silale.tbl_enderecos.rua, db_silale.tbl_enderecos.numero, db_silale.tbl_enderecos.bairro, db_silale.tbl_enderecos.cidade, db_silale.tbl_enderecos.estado, db_silale.tbl_enderecos.cep FROM db_silale.tbl_clientes JOIN db_silale.tbl_enderecos ON db_silale.tbl_clientes.id = db_silale.tbl_enderecos.idCliente WHERE id = %s", id)
         userRow = cursor.fetchall()
         if not userRow:
             return Response('Usuário não cadastrado', status=404)
@@ -176,6 +176,6 @@ def not_found(error=None):
     response = jsonify(message)
     response.status_code = 404
     return response
+
 if __name__ == "__main__":
-    app.debug = True
-    app.run()
+    app.run(debug=True, host = "0.0.0.0", port = 5001)
