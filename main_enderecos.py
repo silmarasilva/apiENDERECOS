@@ -147,7 +147,7 @@ def not_found(error=None):
 # Criando as Rotas API para relação JOIN Cliente e Endereço - GET
 # Busca de endereços por ID do clientes
 # http://127.0.0.1:5000/clientes/enderecos/id
-@app.route('/clientes/enderecos/<int:id>')
+@app.route('/enderecos/clientes/<int:id>')
 @basic_auth.required
 def ligacao_cliente_enderecos(id):
     try:
